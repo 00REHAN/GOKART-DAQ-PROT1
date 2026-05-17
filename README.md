@@ -24,6 +24,7 @@ The system collects and transmits:
 - Acceleration and G-force data
 - Gyroscope and orientation data
 - Motion analysis using IMU data
+- SD card data logging
 
 ---
 
@@ -36,6 +37,7 @@ The main DAQ ESP32 is responsible for:
 - Reading all sensor inputs
 - Processing telemetry data
 - Timestamping data packets
+- Logging telemetry data to an SD card
 - Sending processed data over Bluetooth
 - Managing real-time vehicle parameters
 
@@ -63,11 +65,19 @@ Provides:
 - Motion tracking
 - G-force measurements
 
+#### SD Card Module
+
+Used for:
+- Local telemetry logging
+- Timestamped data storage
+- Offline data analysis
+- Backup storage during communication loss
+
 ---
 
 ## 2. Display Unit (ESP32-S3)
 
-The display subsystem uses an **ESP32-S3** connected to a **2.8” LCD display**.
+The display subsystem uses an **ESP32-S3** connected to a **2.8” LCD display** through a **40-pin display connector**.
 
 ### Features
 
@@ -107,7 +117,9 @@ This eliminates the need for wired connections running through the steering asse
 - MPU6050
 - Hall Effect Sensor
 - GPS Module
+- SD Card Module
 - 2.8” LCD Display
+- 40-Pin Display Connector
 - Vero/Perf Board
 - Bluetooth Communication
 - LVGL v8.0
@@ -125,19 +137,10 @@ This eliminates the need for wired connections running through the steering asse
 | MPU6050 SCL | I2C SCL | GPIO 22 |
 | GPS TX | UART RX | GPIO 16 |
 | GPS RX | UART TX | GPIO 17 |
-
----
-
-## ESP32-S3 Display Pinout
-
-| Component | Signal | ESP32-S3 Pin |
-|----------|----------|----------|
-| LCD MOSI | SPI MOSI | GPIO 11 |
-| LCD MISO | SPI MISO | GPIO 13 |
-| LCD SCK | SPI Clock | GPIO 12 |
-| LCD CS | Chip Select | GPIO 10 |
-| LCD DC | Data/Command | GPIO 9 |
-| LCD RST | Reset | GPIO 14 |
+| SD Card MOSI | SPI MOSI | GPIO 23 |
+| SD Card MISO | SPI MISO | GPIO 19 |
+| SD Card SCK | SPI Clock | GPIO 18 |
+| SD Card CS | Chip Select | GPIO 5 |
 
 ---
 
@@ -151,6 +154,8 @@ Handles:
 - Data acquisition
 - RPM calculations
 - IMU processing
+- GPS parsing
+- SD card logging
 - Bluetooth transmission
 - Timestamp management
 
@@ -175,14 +180,14 @@ They contain:
 - MPU6050 wiring
 - GPS module connections
 - Hall sensor interface
-- LCD display connections
+- SD card module connections
+- 40-pin display interface
 - Bluetooth communication architecture
 
 ---
 
 # Future Improvements
 
-- SD card logging
 - LoRa telemetry support
 - CAN bus integration
 - Cloud telemetry dashboard
